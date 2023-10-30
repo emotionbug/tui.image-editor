@@ -1231,10 +1231,12 @@ class Graphics {
    * @private
    */
   _onObjectSelected(fEvent) {
-    const { target } = fEvent;
-    const params = this.createObjectProperties(target);
+    const selected = this.extractSelection(fEvent);
+    forEachArray(selected, (target) => {
+      const params = this.createObjectProperties(target);
 
-    this.fire(events.OBJECT_ACTIVATED, params);
+      this.fire(events.OBJECT_ACTIVATED, params);
+    });
   }
 
   /**
@@ -1273,11 +1275,22 @@ class Graphics {
    * @private
    */
   _onSelectionCreated(fEvent) {
-    const { target } = fEvent;
-    const params = this.createObjectProperties(target);
+    const selected = this.extractSelection(fEvent);
+    forEachArray(selected, (target) => {
+      const params = this.createObjectProperties(target);
 
-    this.fire(events.OBJECT_ACTIVATED, params);
-    this.fire(events.SELECTION_CREATED, fEvent.target);
+      this.fire(events.OBJECT_ACTIVATED, params);
+      this.fire(events.SELECTION_CREATED, target);
+    });
+  }
+
+  extractSelection(fEvent) {
+    if (!fEvent || !!fEvent.hasOwnProperty('selected')) {
+      return [];
+    }
+    const { selected } = fEvent;
+
+    return selected;
   }
 
   /**

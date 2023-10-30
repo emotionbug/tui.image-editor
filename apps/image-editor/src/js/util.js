@@ -21,7 +21,7 @@ let hostnameSent = false;
 let lastId = 0;
 
 export function stamp(obj) {
-  if (!obj.__fe_id) {
+  if (!obj.hasOwnProperty('__fe_id') || !obj.__fe_id) {
     lastId += 1;
     // eslint-disable-next-line camelcase
     obj.__fe_id = lastId;
